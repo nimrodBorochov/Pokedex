@@ -1,6 +1,6 @@
 //
 //  Pokemon.swift
-//  PokTemp
+//  Pokedex
 //
 //  Created by Nimrod Borochov on 01/02/2024.
 // Detail
@@ -12,19 +12,19 @@ struct Pokemon: Hashable {
     let name: String
     var imageURL: URL?
 
-    init?(pokemonResponse: PokemonResponse) {
-        guard let urlComponents = URLComponents(string: pokemonResponse.url),
+    init?(pokemon: NamedAPIResource) {
+        guard let urlComponents = URLComponents(string: pokemon.url),
               let idString = urlComponents.path.split(separator: "/").last,
               let id = Int(idString) else {
             return nil
         }
 
         self.id = id
-        self.name = pokemonResponse.name
+        self.name = pokemon.name
         self.imageURL = URL(string: APIEndpoint.getPokemonImage(id: id).url?.absoluteString ?? "")
     }
 
 
-    static var preview: Pokemon = Pokemon(pokemonResponse:PokemonResponse(name: "bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/"))!
+    static var preview: Pokemon = Pokemon(pokemon:NamedAPIResource(name: "bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/"))!
 
 }

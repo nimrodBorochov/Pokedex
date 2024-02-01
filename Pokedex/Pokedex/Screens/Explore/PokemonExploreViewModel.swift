@@ -1,18 +1,17 @@
 //
 //  PokemonExploreViewModel.swift
-//  PokTemp
+//  Pokedex
 //
 //  Created by Nimrod Borochov on 01/02/2024.
 //
 
 import Foundation
 
-@MainActor
-class PokemonExploreViewModel: ObservableObject {
+@Observable class PokemonExploreViewModel {
     private let networkClient: NetworkClientProtocol
 
-    @Published var pokemons: [Pokemon] = [Pokemon]()
-    @Published var offset: Int = 20
+    var pokemons: [Pokemon] = [Pokemon]()
+    var offset: Int = 0
 
     init(networkClient: NetworkClientProtocol = NetworkClient()) {
         self.networkClient = networkClient

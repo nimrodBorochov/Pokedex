@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PokemonExploreView: View {
 
-    @StateObject private var viewModel: PokemonExploreViewModel = PokemonExploreViewModel()
+    @Bindable private var viewModel: PokemonExploreViewModel = PokemonExploreViewModel()
 
     var body: some View {
         NavigationView {

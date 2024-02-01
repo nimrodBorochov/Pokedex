@@ -1,6 +1,6 @@
 //
 //  Constants.swift
-//  PokTemp
+//  Pokedex
 //
 //  Created by Nimrod Borochov on 01/02/2024.
 //
@@ -16,6 +16,7 @@ enum APIEndpoint {
 
     case getPokemonList(limit: Int, offset: Int)
     case getPokemonImage(id: Int)
+    case getPokemonDetails(id: Int)
 
     var url: URL? {
         switch self {
@@ -23,6 +24,8 @@ enum APIEndpoint {
             return URL(string: "\(APIEndpoint.pokeApiURL)pokemon?limit=\(limit)&offset=\(offset)")
         case .getPokemonImage(let id):
             return URL(string: String(format: APIEndpoint.pokeApiArtworkURL, id))
+        case .getPokemonDetails(let id):
+            return URL(string: "\(APIEndpoint.pokeApiURL)pokemon/\(id)")
         }
     }
 }
