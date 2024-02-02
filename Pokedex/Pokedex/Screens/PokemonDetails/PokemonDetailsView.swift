@@ -12,8 +12,9 @@ struct PokemonDetailsView: View {
     @Bindable var viewModel: PokemonDetailsViewModel
 
     var pokemonId: Int
+    @State private var showingAlert = false
+    @State private var nickname = ""
     @State private var selectedTab = 0
-    @State private var showShinny =  false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -25,8 +26,19 @@ struct PokemonDetailsView: View {
                         .foregroundColor(.white)
                         .fontWeight(.bold)
                     Spacer()
+                    Button("Add To Bag") {
+                        showingAlert.toggle()
+                    }
+                    .alert("Enter Pokemon nickname", isPresented: $showingAlert) {
+                        TextField("nickname", text: $nickname)
+                            .autocorrectionDisabled()
+                        Button("OK") {
+                            Task {
+                                viewModel.addToFavorites(_: nickname)
+                            }
+                        }
+                    }
                 }
-
 
                 HStack(spacing:15) {
                     Text(viewModel.pokemon?.name ?? "")
@@ -46,7 +58,7 @@ struct PokemonDetailsView: View {
                     .stroke()
                     .frame(width: 180, height: 180)
 
-                AsyncImage(url: showShinny ?
+                AsyncImage(url: viewModel.showShinny ?
                            viewModel.pokemon?.frontShinyImageUrl :
                             viewModel.pokemon?.frontDefaultImageUrl) { image in
                     image
@@ -54,7 +66,7 @@ struct PokemonDetailsView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 200, height: 200)
                         .onTapGesture {
-                            showShinny.toggle()
+                            viewModel.showShinny.toggle()
                         }
                 } placeholder: { ProgressView()}
             }

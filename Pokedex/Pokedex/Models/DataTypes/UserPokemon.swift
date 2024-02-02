@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct UserPokemon: Hashable {
-    let id = UUID()
+struct UserPokemon: Codable, Hashable {
+    var id = UUID()
     let pokemon: Pokemon
     let nickname: String
 

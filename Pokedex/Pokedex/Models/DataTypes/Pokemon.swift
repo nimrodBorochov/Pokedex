@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Pokemon: Hashable {
+struct Pokemon: Codable, Hashable {
     let id: Int
     let name: String
     var imageURL: URL?
@@ -24,6 +24,11 @@ struct Pokemon: Hashable {
         self.imageURL = URL(string: APIEndpoint.getPokemonImage(id: id).url?.absoluteString ?? "")
     }
 
+    init(id: Int, name: String, imageURL: URL?) {
+        self.id = id
+        self.name = name
+        self.imageURL = imageURL
+    }
 
     static var preview: Pokemon = Pokemon(pokemon:NamedAPIResource(name: "bulbasaur", url: "https://pokeapi.co/api/v2/pokemon/1/"))!
 

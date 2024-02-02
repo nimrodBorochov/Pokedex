@@ -15,7 +15,7 @@ struct TabBarView: View {
                     Label("Pokédex", systemImage: "text.book.closed")
                 }
 
-            UserPokemonsView()
+            UserPokemonsView(viewModel: UserPokemonsViewModel())
                 .tabItem {
                     Label("My Pokemons", systemImage: "cricket.ball.fill")
                 }
