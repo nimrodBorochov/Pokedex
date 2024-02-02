@@ -8,7 +8,7 @@
 import Foundation
 
 @Observable class PokemonExploreViewModel {
-    private let networkClient: NetworkClientProtocol
+    let networkClient: NetworkClientProtocol
 
     var pokemons: [Pokemon] = [Pokemon]()
     var offset: Int = 0
@@ -34,14 +34,7 @@ import Foundation
         }
     }
 
-    func loadPokemonDetails(by id: Int) async {
-        do {
-            self.currentPokemonDetails = try await networkClient.fetchPokemon(id: id)
-            print(self.currentPokemonDetails)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+    
 
     private func increaseOffset(value: Int) {
         offset += value

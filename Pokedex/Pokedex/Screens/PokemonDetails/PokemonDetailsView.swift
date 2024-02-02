@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PokemonDetailsView: View {
 
-    @Bindable var viewModel: PokemonExploreViewModel = PokemonExploreViewModel()
+    @Bindable var viewModel: PokemonDetailsViewModel
 
     var pokemonId: Int
     @State private var selectedTab = 0
@@ -21,7 +21,7 @@ struct PokemonDetailsView: View {
 
             VStack {
                 HStack {
-                    Text("#\(String(format: "%03d", viewModel.currentPokemonDetails?.id ?? ""))")
+                    Text("#\(String(format: "%03d", viewModel.pokemon?.id ?? ""))")
                         .foregroundColor(.white)
                         .fontWeight(.bold)
                     Spacer()
@@ -29,7 +29,7 @@ struct PokemonDetailsView: View {
 
 
                 HStack(spacing:15) {
-                    Text(viewModel.currentPokemonDetails?.name ?? "")
+                    Text(viewModel.pokemon?.name ?? "")
                         .foregroundColor(.white)
                         .font(.title)
                         .fontWeight(.bold)
@@ -47,8 +47,8 @@ struct PokemonDetailsView: View {
                     .frame(width: 180, height: 180)
 
                 AsyncImage(url: showShinny ?
-                           viewModel.currentPokemonDetails?.frontShinyImageUrl :
-                            viewModel.currentPokemonDetails?.frontDefaultImageUrl) { image in
+                           viewModel.pokemon?.frontShinyImageUrl :
+                            viewModel.pokemon?.frontDefaultImageUrl) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -73,12 +73,12 @@ struct PokemonDetailsView: View {
                     switch selectedTab {
                     case 0:
 
-                        ForEach(viewModel.currentPokemonDetails?.abilities ?? [], id: \.self) { ability in
+                        ForEach(viewModel.pokemon?.abilities ?? [], id: \.self) { ability in
                             Text(ability)
                         }
 
                     case 1:
-                        ForEach(viewModel.currentPokemonDetails?.stats ?? [], id: \.self.name) { stats in
+                        ForEach(viewModel.pokemon?.stats ?? [], id: \.self.name) { stats in
                             HStack {
                                 Text(stats.name)
                                 Spacer()
@@ -88,7 +88,7 @@ struct PokemonDetailsView: View {
 
                     case 2:
 
-                        ForEach(viewModel.currentPokemonDetails?.moves ?? [], id: \.self) { move in
+                        ForEach(viewModel.pokemon?.moves ?? [], id: \.self) { move in
                             Text(move)
                         }
 
@@ -106,7 +106,6 @@ struct PokemonDetailsView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            print("im here")
             await viewModel.loadPokemonDetails(by: pokemonId)
         }
 
@@ -114,5 +113,5 @@ struct PokemonDetailsView: View {
 }
 
 #Preview {
-    PokemonDetailsView(viewModel: PokemonExploreViewModel(networkClient: NetworkClient()), pokemonId: 1)
+    PokemonDetailsView(viewModel: PokemonDetailsViewModel(networkClient: NetworkClient()), pokemonId: 1)
 }

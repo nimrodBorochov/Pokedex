@@ -16,7 +16,7 @@ struct PokemonExploreView: View {
             List {
                 ForEach(viewModel.pokemons, id: \.self) { pokemon in
                     NavigationLink {
-                        PokemonDetailsView(viewModel: viewModel, pokemonId: pokemon.id)
+                        PokemonDetailsView(viewModel: PokemonDetailsViewModel(networkClient: viewModel.networkClient), pokemonId: pokemon.id)
                     }
                 label: {
                     PokemonExploreCell(pokemon: pokemon)
