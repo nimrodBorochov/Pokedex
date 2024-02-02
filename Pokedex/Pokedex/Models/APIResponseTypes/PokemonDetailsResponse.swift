@@ -15,6 +15,7 @@ struct PokemonDetailsResponse: Codable {
     let abilities: [PokemonAbility]
     let stats: [PokemonStats]
     let moves: [PokemonMoves]
+    let sprites: PokemonSprites
 }
 
 struct PokemonAbility : Codable
@@ -34,3 +35,21 @@ struct PokemonStats: Codable {
 struct PokemonMoves: Codable {
     let move: NamedAPIResource
 }
+
+struct PokemonSprites: Codable {
+    let other: OtherPokemonSprites
+}
+
+struct OtherPokemonSprites: Codable {
+    let officialArtwork: OfficialArtwork
+
+    private enum CodingKeys: String, CodingKey {
+        case officialArtwork = "official-artwork"
+    }
+}
+
+struct OfficialArtwork: Codable {
+    let frontDefault: String?
+    let frontShiny: String?
+}
+

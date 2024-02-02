@@ -37,6 +37,7 @@ import Foundation
     func loadPokemonDetails(by id: Int) async {
         do {
             self.currentPokemonDetails = try await networkClient.fetchPokemon(id: id)
+            print(self.currentPokemonDetails)
         } catch {
             print(error.localizedDescription)
         }

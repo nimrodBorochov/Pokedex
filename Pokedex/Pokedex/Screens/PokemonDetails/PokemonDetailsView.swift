@@ -13,6 +13,7 @@ struct PokemonDetailsView: View {
 
     var pokemonId: Int
     @State private var selectedTab = 0
+    @State private var showShinny =  false
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -39,6 +40,27 @@ struct PokemonDetailsView: View {
                 }
             }.padding(20)
 
+            ZStack {
+
+                Circle()
+                    .stroke()
+                    .frame(width: 180, height: 180)
+
+                AsyncImage(url: showShinny ?
+                           viewModel.currentPokemonDetails?.frontShinyImageUrl :
+                            viewModel.currentPokemonDetails?.frontDefaultImageUrl) { image in
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 200, height: 200)
+                        .onTapGesture {
+                            showShinny.toggle()
+                        }
+                } placeholder: { ProgressView()}
+            }
+            .offset(x:0, y: 120)
+            .zIndex(2)
+
             VStack {
 
                 Picker("", selection: $selectedTab) {
@@ -51,24 +73,24 @@ struct PokemonDetailsView: View {
                     switch selectedTab {
                     case 0:
 
-                            ForEach(viewModel.currentPokemonDetails?.abilities ?? [], id: \.self) { ability in
-                                Text(ability)
-                            }
+                        ForEach(viewModel.currentPokemonDetails?.abilities ?? [], id: \.self) { ability in
+                            Text(ability)
+                        }
 
                     case 1:
-                            ForEach(viewModel.currentPokemonDetails?.stats ?? [], id: \.self.name) { stats in
-                                HStack {
-                                    Text(stats.name)
-                                    Spacer()
-                                    Text(String(stats.rating))
-                                }
+                        ForEach(viewModel.currentPokemonDetails?.stats ?? [], id: \.self.name) { stats in
+                            HStack {
+                                Text(stats.name)
+                                Spacer()
+                                Text(String(stats.rating))
                             }
+                        }
 
                     case 2:
 
-                            ForEach(viewModel.currentPokemonDetails?.moves ?? [], id: \.self) { move in
-                                Text(move)
-                            }
+                        ForEach(viewModel.currentPokemonDetails?.moves ?? [], id: \.self) { move in
+                            Text(move)
+                        }
 
                     default :
                         EmptyView()
@@ -84,6 +106,7 @@ struct PokemonDetailsView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            print("im here")
             await viewModel.loadPokemonDetails(by: pokemonId)
         }
 
