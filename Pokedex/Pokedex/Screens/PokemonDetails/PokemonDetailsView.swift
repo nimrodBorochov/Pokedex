@@ -9,15 +9,18 @@ import SwiftUI
 
 struct PokemonDetailsView: View {
 
-    let pokemon : Pokemon
+    @Bindable var viewModel: PokemonExploreViewModel = PokemonExploreViewModel()
+
+    var pokemonId: Int
+    @State private var selectedTab = 0
 
     var body: some View {
-        ZStack(alignment: .center) {
-//            pokemon.types.first?.color()
-//                .ignoresSafeArea(.all)
+        ZStack(alignment: .top) {
+            Color(.systemGreen)
+
             VStack {
                 HStack {
-                    Text("#\(String(format: "%03d", pokemon.id))")
+                    Text("#\(String(format: "%03d", viewModel.currentPokemonDetails?.id ?? ""))")
                         .foregroundColor(.white)
                         .fontWeight(.bold)
                     Spacer()
@@ -25,7 +28,7 @@ struct PokemonDetailsView: View {
 
 
                 HStack(spacing:15) {
-                    Text(pokemon.name)
+                    Text(viewModel.currentPokemonDetails?.name ?? "")
                         .foregroundColor(.white)
                         .font(.title)
                         .fontWeight(.bold)
@@ -33,24 +36,60 @@ struct PokemonDetailsView: View {
 
                     Spacer()
 
-//                    Text(pokemon.shape)
-//                        .foregroundColor(.white)
-//                        .fontWeight(.bold)
                 }
-
-//                HStack {
-//                    ForEach(pokemon.types, id: \.self) { type in
-//                        PokemonTypeItemView(type: type)
-//                    }
-//
-//                    Spacer()
-//                }
             }.padding(20)
 
-        }.navigationBarTitleDisplayMode(.inline)
+            VStack {
+
+                Picker("", selection: $selectedTab) {
+                    Text("Abilities").tag(0)
+                    Text("Stats").tag(1)
+                    Text("Moves").tag(2)
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                List {
+                    switch selectedTab {
+                    case 0:
+
+                            ForEach(viewModel.currentPokemonDetails?.abilities ?? [], id: \.self) { ability in
+                                Text(ability)
+                            }
+
+                    case 1:
+                            ForEach(viewModel.currentPokemonDetails?.stats ?? [], id: \.self.name) { stats in
+                                HStack {
+                                    Text(stats.name)
+                                    Spacer()
+                                    Text(String(stats.rating))
+                                }
+                            }
+
+                    case 2:
+
+                            ForEach(viewModel.currentPokemonDetails?.moves ?? [], id: \.self) { move in
+                                Text(move)
+                            }
+
+                    default :
+                        EmptyView()
+                    }
+                }
+                .foregroundColor(.green)
+            }
+            .padding(.top, 40)
+            .padding(.horizontal)
+            .background(.white)
+            .cornerRadius(30)
+            .offset(y:280)
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .task {
+            await viewModel.loadPokemonDetails(by: pokemonId)
+        }
+
     }
 }
 
 #Preview {
-    PokemonDetailsView(pokemon: .preview)
+    PokemonDetailsView(viewModel: PokemonExploreViewModel(networkClient: NetworkClient()), pokemonId: 1)
 }

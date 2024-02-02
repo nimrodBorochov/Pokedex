@@ -12,26 +12,33 @@ import Foundation
 
     var pokemons: [Pokemon] = [Pokemon]()
     var offset: Int = 0
+    var currentPokemonDetails: PokemonDetails?
 
     init(networkClient: NetworkClientProtocol = NetworkClient()) {
         self.networkClient = networkClient
     }
 
-    func handleOnAppear(pokemon: Pokemon) {
+    func handleOnAppear(pokemon: Pokemon) async {
         guard pokemons.last == pokemon else { return }
 
         increaseOffset(value: APIEndpoint.pokeApiPokemonListLimit)
-        loadPokemonList()
+        await loadPokemonList()
     }
 
-    func loadPokemonList() {
-        Task {
-            do {
-                let pokemons = try await networkClient.fetchPokemons(limit: 20, offset: offset)
-                self.pokemons += pokemons.compactMap{$0}
-            } catch {
-                print(error.localizedDescription)
-            }
+    func loadPokemonList() async {
+        do {
+            let pokemons = try await networkClient.fetchPokemons(limit: 20, offset: offset)
+            self.pokemons += pokemons.compactMap{$0}
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
+    func loadPokemonDetails(by id: Int) async {
+        do {
+            self.currentPokemonDetails = try await networkClient.fetchPokemon(id: id)
+        } catch {
+            print(error.localizedDescription)
         }
     }
 

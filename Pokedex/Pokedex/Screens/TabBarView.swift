@@ -10,7 +10,7 @@ import SwiftUI
 struct TabBarView: View {
     var body: some View {
         TabView {
-            PokemonExploreView()
+            PokemonExploreView(viewModel: PokemonExploreViewModel(networkClient: NetworkClient()))
                 .tabItem {
                     Label("Pokédex", systemImage: "text.book.closed")
                 }

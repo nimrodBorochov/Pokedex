@@ -8,6 +8,7 @@
 import Foundation
 
 struct PokemonDetailsResponse: Codable {
+    let id: Int
     let name: String
     let height: Int // The height of this Pokémon in decimeter.
     let weight: Int // The weight of this Pokémon in hectograms.
