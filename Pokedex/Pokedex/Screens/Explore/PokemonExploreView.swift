@@ -19,7 +19,7 @@ struct PokemonExploreView: View {
         NavigationView {
 
             ZStack {
-                Color(.systemBackground) // TODO:: pretty
+                Color(.systemBackground)
 
                 PokemonListView
             }
@@ -33,7 +33,7 @@ struct PokemonExploreView: View {
 
     private var PokemonListView: some View {
         ScrollView {
-            LazyVGrid(columns: adaptiveColumns, spacing: 10) {
+            LazyVGrid(columns: adaptiveColumns, spacing: 12) {
                 ForEach(viewModel.pokemons, id: \.self) { pokemon in
                     NavigationLink {
                         PokemonDetailsView(viewModel: PokemonDetailsViewModel(networkClient: viewModel.networkClient), pokemonId: pokemon.id)

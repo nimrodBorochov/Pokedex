@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct EffectEntries: Codable {
+struct EffectEntries: Decodable {
     let effect: String
     let language: NamedAPIResource
 }

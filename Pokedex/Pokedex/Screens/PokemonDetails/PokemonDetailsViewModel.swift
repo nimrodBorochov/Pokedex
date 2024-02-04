@@ -11,8 +11,9 @@ import SwiftUI
     private let networkClient: NetworkClientProtocol
     var pokemon: PokemonDetails?
 
-    var showShinny =  false
-    var showingAlert = false
+    var loading = true
+    var showShinny = false
+    var showAlert = false
     var nickname = ""
     var selectedTab = 0
     
@@ -40,6 +41,7 @@ import SwiftUI
     func loadPokemonDetails(by id: Int) async {
         do {
             self.pokemon = try await networkClient.fetchPokemon(id: id)
+            loading = false
         } catch {
             print(error.localizedDescription)
         }

@@ -10,7 +10,6 @@ import Foundation
 enum APIEndpoint {
     static let pokeApiURL = "https://pokeapi.co/api/v2/"
     static let pokeApiArtworkURL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
-//    static let pokeApiTimeoutInterval: Double = 15.0
 
     static let pokeApiPokemonListLimit: Int = 20
 

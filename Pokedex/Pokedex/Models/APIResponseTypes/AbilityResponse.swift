@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AbilityResponse: Codable {
+struct AbilityResponse: Decodable {
     let name: String
     let effectEntries: [EffectEntries]
 }

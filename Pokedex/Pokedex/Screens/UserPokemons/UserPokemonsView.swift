@@ -16,18 +16,16 @@ struct UserPokemonsView: View {
         ZStack {
             BackgroundAnimation()
 
-            ScrollView {
-                LazyVStack {
-                    ForEach(viewModel.pokemons, id: \.self) { pokemon in
-                        UserPokemonCell(userPokemon: pokemon)
-                    }
-                    .onDelete(perform: { indexSet in
-                        viewModel.delete(indexSet)
-                    })
+            List {
+                ForEach(viewModel.pokemons, id: \.self) { pokemon in
+                    UserPokemonCell(userPokemon: pokemon)
+                        .listRowBackground(Color.clear)
                 }
-                .padding()
-                .scrollContentBackground(.hidden)
+                .onDelete(perform: { indexSet in
+                    viewModel.delete(indexSet)
+                })
             }
+            .scrollContentBackground(.hidden)
         }
         .task {
             viewModel.getUserPokemons()

@@ -10,8 +10,6 @@ import Foundation
 struct PokemonDetails {
     let id: Int
     let name: String
-    let height: Int // The height of this Pokémon in decimeter.
-    let weight: Int // The weight of this Pokémon in hectograms.
     let abilities: [Ability]
     let stats: [Stat]
     let moves: [Move]
@@ -23,8 +21,6 @@ struct PokemonDetails {
     init(pokemonDetailsResponse: PokemonDetailsResponse, abilities: [Ability], moves: [Move]) {
         self.id = pokemonDetailsResponse.id
         self.name = pokemonDetailsResponse.name
-        self.height = pokemonDetailsResponse.height
-        self.weight = pokemonDetailsResponse.weight
 
         self.abilities = abilities
         self.stats = pokemonDetailsResponse.stats.compactMap { Stat(name: $0.stat.name.replacingOccurrences(of: "special-", with: "Sp. ").capitalized, baseStat: $0.baseStat) }
@@ -39,14 +35,11 @@ struct PokemonDetails {
         if let frontShiny = pokemonDetailsResponse.sprites.other.officialArtwork.frontShiny {
             self.frontShinyImageUrl = URL(string: frontShiny)
         }
-
     }
 
     static var preview: PokemonDetails = PokemonDetails(pokemonDetailsResponse: PokemonDetailsResponse(
         id: 1,
         name: "bulbasaur",
-        height: 7,
-        weight: 69,
         abilities: [
             PokemonAbility(ability: NamedAPIResource(name: "overgrow", url: "https://pokeapi.co/api/v2/ability/65/")),
             PokemonAbility(ability: NamedAPIResource(name: "chlorophyll", url: "https://pokeapi.co/api/v2/ability/34/")),
@@ -111,5 +104,4 @@ struct PokemonDetails {
                                                                 )
                                                             )
                                                         ]))])
-
 }

@@ -7,8 +7,7 @@
 
 import Foundation
 
-
-struct TypeResponse: Codable {
+struct TypeResponse: Decodable {
     let id: Int
     let name: `Type`
 

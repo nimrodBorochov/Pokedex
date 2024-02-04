@@ -16,22 +16,26 @@ struct PokemonDetailsView: View {
     var body: some View {
         ZStack(alignment: .top) {
             Color(viewModel.primaryTypeColor)
-            ScrollView {
-                DetailsHeader
+            if (viewModel.loading) {
+                ProgressView()
+            } else {
+                ScrollView {
+                    DetailsHeader
 
-                PokemonInteractiveImage
-                    .zIndex(2)
+                    PokemonInteractiveImage
+                        .zIndex(2)
 
-                DetailsPicker
-                    .cornerRadius(30)
-                    .offset(y:-40)
+                    DetailsPicker
+                        .cornerRadius(30)
+                        .offset(y:-40)
+                }
             }
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Toolbar
         }
-        .alert("Do you want to catch this Pokemon?", isPresented: $viewModel.showingAlert) {
+        .alert("Do you want to catch this Pokemon?", isPresented: $viewModel.showAlert) {
             TextField("nickname", text: $viewModel.nickname)
                 .autocorrectionDisabled()
             Button("OK"){ Task { viewModel.addToFavorites() } }
@@ -136,7 +140,7 @@ struct PokemonDetailsView: View {
 
     private var Toolbar: some View {
         Button(action: {
-            viewModel.showingAlert.toggle()
+            viewModel.showAlert.toggle()
         }, label: {
             Label("Catch", systemImage: "cricket.ball.fill")
         })

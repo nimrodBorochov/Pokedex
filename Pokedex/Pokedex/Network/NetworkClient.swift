@@ -40,6 +40,7 @@ class NetworkClient: NetworkClientProtocol {
         }
 
 
+        // TODO:: Separate this as it can take time
         let moves: [Move] = try await withThrowingTaskGroup(of: Move.self) { group -> [Move] in
             var fetchedMoves: [Move] = []
 
@@ -58,49 +59,9 @@ class NetworkClient: NetworkClientProtocol {
 
             return fetchedMoves
         }
-//        var abilities: [Ability] = []
-//
-//        
-//        // TODO:: Concurrency
-//        for ability in pokemonDetailsResponse.abilities {
-//            if let url = URL(string: ability.ability.url) {
-//                let abilityResponse: AbilityResponse = try await fetch(from: url)
-//                abilities.append(Ability(abilityResponse: abilityResponse))
-//            }
-//        }
-
-//        var moves: [Move] = []
-//
-//        // TODO:: Concurrency
-//        for move in pokemonDetailsResponse.moves {
-//            if let url = URL(string: move.move.url) {
-//                let moveResponse: MoveResponse = try await fetch(from: url)
-//                moves.append(Move(moveResponse: moveResponse))
-//            }
-//        }
-
 
         return PokemonDetails(pokemonDetailsResponse: pokemonDetailsResponse, abilities: abilities, moves: moves)
     }
-    
-//    func loadStories() async {
-//            do {
-//                stories = try await withThrowingTaskGroup(of: [NewsStory].self) { group -> [NewsStory] in
-//                    for i in 1...5 {
-//                        group.addTask {
-//                            let url = URL(string: "https://hws.dev/news-\(i).json")!
-//                            let (data, _) = try await URLSession.shared.data(from: url)
-//                            return try JSONDecoder().decode([NewsStory].self, from: data)
-//                        }
-//                    }
-//
-//                    let allStories = try await group.reduce(into: [NewsStory]()) { $0 += $1 }
-//                    return allStories.sorted { $0.id > $1.id }
-//                }
-//            } catch {
-//                print("Failed to load stories")
-//            }
-//        }
 
     enum FetcherError: Error {
         case invalidURL
