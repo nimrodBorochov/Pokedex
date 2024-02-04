@@ -26,7 +26,6 @@ import Foundation
 
     func delete(_ indexSet: IndexSet) {
         indexSet.forEach { (index) in
-//            pokemons.remove(at: index)
             PersistenceManager.updateWith(userPokemon: pokemons[index],
                                           actionType: .remove) { [weak self] error in
                 guard let self else { return }

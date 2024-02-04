@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PokemonDetailsResponse: Decodable {
+struct PokemonDetailsResponse: Codable {
     let id: Int
     let name: String
     let abilities: [PokemonAbility]
@@ -17,24 +17,24 @@ struct PokemonDetailsResponse: Decodable {
     let types: [PokemonType]
 }
 
-struct PokemonAbility : Decodable {
+struct PokemonAbility : Codable {
     let ability: NamedAPIResource
 }
 
-struct PokemonStats: Decodable {
+struct PokemonStats: Codable {
     let stat: NamedAPIResource
     let baseStat: Int // The base value of the stat.
 }
 
-struct PokemonMoves: Decodable {
+struct PokemonMoves: Codable {
     let move: NamedAPIResource
 }
 
-struct PokemonSprites: Decodable {
+struct PokemonSprites: Codable {
     let other: OtherPokemonSprites
 }
 
-struct OtherPokemonSprites: Decodable {
+struct OtherPokemonSprites: Codable {
     let officialArtwork: OfficialArtwork
 
     private enum CodingKeys: String, CodingKey {
@@ -42,12 +42,12 @@ struct OtherPokemonSprites: Decodable {
     }
 }
 
-struct OfficialArtwork: Decodable {
+struct OfficialArtwork: Codable {
     let frontDefault: String?
     let frontShiny: String?
 }
 
-struct PokemonType: Decodable {
+struct PokemonType: Codable {
     let slot: Int
     let type: NamedAPIResource
 }

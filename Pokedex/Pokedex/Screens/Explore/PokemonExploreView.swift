@@ -25,8 +25,10 @@ struct PokemonExploreView: View {
             }
             .navigationTitle("Pokédex")
             .navigationBarTitleDisplayMode(.inline)
-            .task {
-                await viewModel.loadPokemonList()
+            .onFirstAppear {
+                Task {
+                    await viewModel.loadPokemonList()
+                }
             }
         }
     }

@@ -43,8 +43,10 @@ struct PokemonDetailsView: View {
         } message: {
             Text("Please enter Pokemon nickname.")
         }
-        .task {
-            await viewModel.loadPokemonDetails(by: pokemonId)
+        .onFirstAppear {
+            Task {
+                await viewModel.loadPokemonDetails(by: pokemonId)
+            }
         }
     }
 
