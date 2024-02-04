@@ -13,13 +13,21 @@ struct UserPokemonsView: View {
 
     var body: some View {
 
-        List {
-            ForEach(viewModel.pokemons, id: \.self) { pokemon in
-                UserPokemonCell(userPokemon: pokemon)
+        ZStack {
+            BackgroundAnimation()
+
+            ScrollView {
+                LazyVStack {
+                    ForEach(viewModel.pokemons, id: \.self) { pokemon in
+                        UserPokemonCell(userPokemon: pokemon)
+                    }
+                    .onDelete(perform: { indexSet in
+                        viewModel.delete(indexSet)
+                    })
+                }
+                .padding()
+                .scrollContentBackground(.hidden)
             }
-            .onDelete(perform: { indexSet in
-                viewModel.delete(indexSet)
-            })
         }
         .task {
             viewModel.getUserPokemons()

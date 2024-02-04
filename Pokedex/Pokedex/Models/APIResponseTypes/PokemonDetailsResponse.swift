@@ -16,6 +16,7 @@ struct PokemonDetailsResponse: Codable {
     let stats: [PokemonStats]
     let moves: [PokemonMoves]
     let sprites: PokemonSprites
+    let types: [PokemonType]
 }
 
 struct PokemonAbility : Codable
@@ -47,5 +48,10 @@ struct OtherPokemonSprites: Codable {
 struct OfficialArtwork: Codable {
     let frontDefault: String?
     let frontShiny: String?
+}
+
+struct PokemonType: Codable {
+    let slot: Int
+    let type: NamedAPIResource
 }
 

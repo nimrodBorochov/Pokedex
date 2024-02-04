@@ -15,15 +15,15 @@ struct MoveView: View {
         VStack {
             HStack {
                 Text(move.name)
-                    .foregroundColor(.purple)
                     .font(.headline)
+                    .fontWeight(.bold)
 
                 Spacer()
             }
             .padding()
-            .background(.purple.opacity(0.3))
 
             Text(move.effect)
         }
+        .padding()
     }
 }

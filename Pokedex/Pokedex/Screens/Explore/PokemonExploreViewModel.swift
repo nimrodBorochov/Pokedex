@@ -33,7 +33,6 @@ import Foundation
             print(error.localizedDescription)
         }
     }
-
     
 
     private func increaseOffset(value: Int) {

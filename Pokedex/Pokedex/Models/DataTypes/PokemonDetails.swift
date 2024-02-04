@@ -13,8 +13,10 @@ struct PokemonDetails {
     let height: Int // The height of this Pokémon in decimeter.
     let weight: Int // The weight of this Pokémon in hectograms.
     let abilities: [Ability]
-    let stats: [Stats]
+    let stats: [Stat]
     let moves: [Move]
+    let primaryType: `Type`
+    let secondaryType: `Type`?
     var frontDefaultImageUrl: URL? = nil
     var frontShinyImageUrl: URL? = nil
 
@@ -25,8 +27,11 @@ struct PokemonDetails {
         self.weight = pokemonDetailsResponse.weight
 
         self.abilities = abilities
-        self.stats = pokemonDetailsResponse.stats.compactMap { Stats(name: $0.stat.name.replacingOccurrences(of: "special-", with: "Sp. ").capitalized, baseStat: $0.baseStat) }
+        self.stats = pokemonDetailsResponse.stats.compactMap { Stat(name: $0.stat.name.replacingOccurrences(of: "special-", with: "Sp. ").capitalized, baseStat: $0.baseStat) }
         self.moves = moves
+
+        self.primaryType = Type(rawValue: pokemonDetailsResponse.types.filter{ $0.slot == 1 }.first?.type.name ?? "")  ?? .unknown
+        self.secondaryType = Type(rawValue: pokemonDetailsResponse.types.filter{ $0.slot == 2 }.first?.type.name ?? "")
 
         if let frontDefault = pokemonDetailsResponse.sprites.other.officialArtwork.frontDefault {
             self.frontDefaultImageUrl = URL(string: frontDefault)
@@ -83,7 +88,10 @@ struct PokemonDetails {
         sprites: PokemonSprites(other: OtherPokemonSprites(officialArtwork: OfficialArtwork(
             frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
             frontShiny: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/1.png")
-        ))
+        )), types: [
+            PokemonType(slot: 1, type: NamedAPIResource(name: "grass", url: "")),
+            PokemonType(slot: 2, type: NamedAPIResource(name: "poison", url: "")),
+        ]
     ),abilities: [Ability(abilityResponse: AbilityResponse(name: "overgrow",
                                                            effectEntries: [
                                                                EffectEntries(

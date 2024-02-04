@@ -11,6 +11,7 @@ struct Pokemon: Codable, Hashable {
     let id: Int
     let name: String
     var imageURL: URL?
+//    var primeryType: Type
 
     init?(pokemon: NamedAPIResource) {
         guard let urlComponents = URLComponents(string: pokemon.url),

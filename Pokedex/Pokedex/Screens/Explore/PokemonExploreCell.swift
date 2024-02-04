@@ -23,7 +23,7 @@ struct PokemonExploreCell: View {
         }
         .padding()
         .foregroundColor(.black)
-        .background(.red.opacity(0.75))
+        .background(goldGradient())
         .cornerRadius(16)
         .shadow(color: .primary, radius: 4)
     }
@@ -45,8 +45,35 @@ struct PokemonExploreCell: View {
             }
         }
     }
+
+    func goldGradient() -> LinearGradient {
+        var colors: [Color] = []
+
+        if let color0 = UIColor(hex: "#DBB400"),
+           let color1 = UIColor(hex: "#EFAF00"),
+           let color2 = UIColor(hex: "#F5D100"),
+           let color3 = UIColor(hex: "#D1AE15"),
+           let color4 = UIColor(hex: "#DBB400"),
+           let color5 = UIColor(hex: "#DBB400")
+        {
+            colors.append(Color(color0))
+            colors.append(Color(color1))
+            colors.append(Color(color2))
+            colors.append(Color(color3))
+            colors.append(Color(color4))
+            colors.append(Color(color5))
+        }
+        else {
+            colors.append(.yellow)
+            colors.append(.primary)
+        }
+
+        return LinearGradient(gradient: Gradient(colors: colors), startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+
 }
 
 #Preview {
     PokemonExploreCell(pokemon: .preview)
 }
+

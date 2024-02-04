@@ -9,22 +9,23 @@ import SwiftUI
 
 struct AbilityView: View {
 
-    var ability: Ability
+    let ability: Ability
 
     var body: some View {
         VStack {
             HStack {
                 Text(ability.name)
-                    .foregroundColor(.purple)
                     .font(.headline)
+                    .fontWeight(.bold)
 
                 Spacer()
             }
             .padding()
-            .background(.purple.opacity(0.3))
 
             Text(ability.effect)
         }
+        .padding()
+
     }
 }
 

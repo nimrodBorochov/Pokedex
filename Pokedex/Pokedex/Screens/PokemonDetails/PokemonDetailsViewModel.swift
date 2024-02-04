@@ -5,14 +5,33 @@
 //  Created by Nimrod Borochov on 02/02/2024.
 //
 
-import Foundation
+import SwiftUI
 
 @Observable class PokemonDetailsViewModel {
     private let networkClient: NetworkClientProtocol
     var pokemon: PokemonDetails?
 
     var showShinny =  false
+    var showingAlert = false
+    var nickname = ""
+    var selectedTab = 0
+    
+    var primaryTypeColor: UIColor {
+        guard let pokemon else { return .systemBackground}
 
+        return pokemon.primaryType.color()
+    }
+
+    var pokemonIndex: String {
+        "#\(String(format: "%03d", pokemon?.id ?? ""))"
+    }
+
+    var primaryColor: Color {
+        guard let pokemon else { return .primary}
+
+        return pokemon.primaryType.textColorOnBg()
+
+    }
 
     init(networkClient: NetworkClientProtocol = NetworkClient()) {
         self.networkClient = networkClient
@@ -26,7 +45,7 @@ import Foundation
         }
     }
 
-    func addToFavorites(_ nickname: String) {
+    func addToFavorites() {
         guard let pokemon else { return }
         PersistenceManager.updateWith(userPokemon: UserPokemon(pokemon: Pokemon(id: pokemon.id,
                                                                                 name: pokemon.name,
