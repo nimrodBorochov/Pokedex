@@ -17,7 +17,7 @@ struct TabBarView: View {
 
             UserPokemonsView(viewModel: UserPokemonsViewModel())
                 .tabItem {
-                    Label("My Pokemons", systemImage: "catchBall")
+                    Label("My Pokemons", systemImage: SFSymbols.catchBall)
                 }
         }
     }
