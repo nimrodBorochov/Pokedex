@@ -9,6 +9,7 @@ import SwiftUI
 
 @Observable class PokemonDetailsViewModel {
     private let networkClient: NetworkClientProtocol
+    private let persistenceManager: PersistenceProtocol
     var pokemon: PokemonDetails?
 
     var loading = true
@@ -34,8 +35,12 @@ import SwiftUI
 
     }
 
-    init(networkClient: NetworkClientProtocol = NetworkClient()) {
+    init(
+        networkClient: NetworkClientProtocol = NetworkClient(),
+        persistenceManager: PersistenceProtocol = PersistenceManager()
+    ) {
         self.networkClient = networkClient
+        self.persistenceManager = persistenceManager
     }
 
     func loadPokemonDetails(by id: Int) async {
@@ -49,15 +54,16 @@ import SwiftUI
 
     func addToFavorites() {
         guard let pokemon else { return }
-        PersistenceManager.updateWith(userPokemon: UserPokemon(pokemon: Pokemon(id: pokemon.id,
-                                                                                name: pokemon.name,
-                                                                                imageURL: pokemon.frontDefaultImageUrl),
-                                                               nickname: nickname),
-                                      actionType: .add) { error in
-            if let error {
-                print(error)
-                //TODO:: handle errors
-            }
-        }
+        let pokemonNickname = nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+        pokemon.name : nickname
+        let catchPokemon = Pokemon(
+            id: pokemon.id,
+            name: pokemon.name,
+            imageURL: pokemon.frontDefaultImageUrl
+        )
+        persistenceManager.updateWith(
+            userPokemon: UserPokemon(pokemon: catchPokemon, nickname: pokemonNickname),
+            actionType: .add
+        )
     }
 }

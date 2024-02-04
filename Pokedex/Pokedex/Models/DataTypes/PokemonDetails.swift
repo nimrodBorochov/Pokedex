@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PokemonDetails {
+struct PokemonDetails: Equatable {
     let id: Int
     let name: String
     let abilities: [Ability]

@@ -38,7 +38,12 @@ struct PokemonDetailsView: View {
         .alert("Do you want to catch this Pokemon?", isPresented: $viewModel.showAlert) {
             TextField("nickname", text: $viewModel.nickname)
                 .autocorrectionDisabled()
-            Button("OK"){ Task { viewModel.addToFavorites() } }
+            Button("OK"){
+                Task {
+                    viewModel.addToFavorites()
+                    viewModel.nickname = ""
+                }
+            }
             Button("Cancel", role: .cancel) { }
         } message: {
             Text("Please enter Pokemon nickname.")
@@ -144,7 +149,7 @@ struct PokemonDetailsView: View {
         Button(action: {
             viewModel.showAlert.toggle()
         }, label: {
-            Label("Catch", systemImage: "cricket.ball.fill")
+            Label("Catch", systemImage: SFSymbols.catchBall)
         })
     }
 }

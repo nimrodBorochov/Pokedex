@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Move: Identifiable {
+struct Move: Identifiable, Equatable {
     let id = UUID()
     let name: String
     let effect: String

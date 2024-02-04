@@ -32,7 +32,7 @@ struct PokemonExploreCell: View {
         ZStack {
             Circle()
                 .frame(width: dimensions, height: dimensions)
-                .foregroundColor(.secondary) // TODO:: pokemon.color with alpha
+                .foregroundColor(.secondary)
 
             AsyncImage(url: pokemon.imageURL) { image in
                 image

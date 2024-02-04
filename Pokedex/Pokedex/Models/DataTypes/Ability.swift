@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ability: Identifiable {
+struct Ability: Identifiable, Equatable {
     let id = UUID()
     let name: String
     let effect: String

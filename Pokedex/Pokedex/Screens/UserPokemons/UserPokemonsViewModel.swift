@@ -9,32 +9,23 @@ import Foundation
 
 @Observable class UserPokemonsViewModel {
     var pokemons: [UserPokemon] = []
+    var persistenceManager: PersistenceProtocol = PersistenceManager()
 
     func getUserPokemons() {
-
-        PersistenceManager.retrieveUserPokemons { [weak self] result in
-
-            guard let self else { return }
-            switch result {
-            case .success(let userPokemons):
-                self.pokemons = userPokemons
-            case .failure(let failure): break
-                //TODO:: handel
-            }
+        do {
+            pokemons = try persistenceManager.retrieveUserPokemons()
+        } catch {
+            //TODO:: handle error
         }
     }
 
     func delete(_ indexSet: IndexSet) {
         indexSet.forEach { (index) in
-            PersistenceManager.updateWith(userPokemon: pokemons[index],
-                                          actionType: .remove) { [weak self] error in
-                guard let self else { return }
-                if let error {
-                    //TODO:: handel
-                } else {
-                    pokemons.remove(at: index)
-                }
-            }
+            persistenceManager.updateWith(
+                userPokemon: pokemons[index],
+                actionType: .remove
+            )
+            pokemons.remove(at: index)
         }
 
     }

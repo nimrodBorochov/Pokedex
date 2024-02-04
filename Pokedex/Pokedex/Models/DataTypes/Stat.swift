@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Stat: Identifiable {
+struct Stat: Identifiable, Equatable {
     let id = UUID()
     let name: String
     let baseStat: Int

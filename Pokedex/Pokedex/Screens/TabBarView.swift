@@ -12,12 +12,12 @@ struct TabBarView: View {
         TabView {
             PokemonExploreView(viewModel: PokemonExploreViewModel(networkClient: NetworkClient()))
                 .tabItem {
-                    Label("Pokédex", systemImage: "text.book.closed")
+                    Label("Pokédex", systemImage: SFSymbols.explore)
                 }
 
             UserPokemonsView(viewModel: UserPokemonsViewModel())
                 .tabItem {
-                    Label("My Pokemons", systemImage: "cricket.ball.fill")
+                    Label("My Pokemons", systemImage: "catchBall")
                 }
         }
     }

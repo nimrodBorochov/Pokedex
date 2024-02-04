@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Pokemon: Codable, Hashable {
+struct Pokemon: Codable, Hashable, Equatable {
     let id: Int
     let name: String
     var imageURL: URL?

@@ -11,7 +11,13 @@ enum PersistenceActionType {
     case add, remove
 }
 
-enum PersistenceManager {
+protocol PersistenceProtocol {
+    func updateWith(userPokemon: UserPokemon, actionType: PersistenceActionType)
+    func retrieveUserPokemons() throws -> [UserPokemon]
+    func save(userPokemons: [UserPokemon]) throws
+}
+
+struct PersistenceManager: PersistenceProtocol {
 
     static private let defaults = UserDefaults.standard
 
@@ -19,53 +25,37 @@ enum PersistenceManager {
         static let userPokemons = "userPokemons"
     }
 
-    static func updateWith(userPokemon: UserPokemon, actionType: PersistenceActionType, completed: @escaping (Error?) -> Void) {
-        retrieveUserPokemons { result in
-            switch result {
-            case .success(let userPokemons):
-                var retrieveUserPokemons = userPokemons
+    func updateWith(userPokemon: UserPokemon, actionType: PersistenceActionType) {
+        do {
+            var userPokemons = try retrieveUserPokemons()
+            switch actionType {
+            case .add:
+                userPokemons.append(userPokemon)
 
-                switch actionType {
-                case .add:
-                    retrieveUserPokemons.append(userPokemon)
-
-                case .remove:
-                    retrieveUserPokemons.removeAll { $0.id == userPokemon.id }
-                }
-
-                completed(save(userPokemons: retrieveUserPokemons))
-
-            case .failure(let error):
-                completed(error)
+            case .remove:
+                userPokemons.removeAll { $0.id == userPokemon.id }
             }
+
+            try save(userPokemons: userPokemons)
+        } catch {
+            //TODO:: handle errors
+            print(error)
         }
     }
 
-    static func retrieveUserPokemons(completed: @escaping (Result<[UserPokemon], Error>) -> Void) {
-        guard let userPokemonsData = defaults.object(forKey: Keys.userPokemons) as? Data else {
+    func retrieveUserPokemons() throws -> [UserPokemon] {
+        guard let userPokemonsData = Self.defaults.object(forKey: Keys.userPokemons) as? Data else {
             // first time
-            completed(.success([]))
-            return
+            return []
         }
 
-        do {
-            let decoder = JSONDecoder()
-            let userPokemons = try decoder.decode([UserPokemon].self, from: userPokemonsData)
-            completed(.success(userPokemons))
-        } catch {
-            completed(.failure(error))
-        }
+        let decoder = JSONDecoder()
+        return try decoder.decode([UserPokemon].self, from: userPokemonsData)
     }
 
-    static func save(userPokemons: [UserPokemon]) -> Error? {
-
-        do {
-            let encoder = JSONEncoder()
-            let encodedUserPokemons = try encoder.encode(userPokemons)
-            defaults.set(encodedUserPokemons, forKey: Keys.userPokemons)
-            return nil
-        } catch {
-            return error
-        }
+    func save(userPokemons: [UserPokemon]) throws {
+        let encoder = JSONEncoder()
+        let encodedUserPokemons = try encoder.encode(userPokemons)
+        Self.defaults.set(encodedUserPokemons, forKey: Keys.userPokemons)
     }
 }

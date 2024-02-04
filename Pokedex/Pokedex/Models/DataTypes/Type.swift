@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum `Type` : String, Codable {
+enum `Type` : String, Codable, Equatable {
     case normal
     case fighting
     case flying
