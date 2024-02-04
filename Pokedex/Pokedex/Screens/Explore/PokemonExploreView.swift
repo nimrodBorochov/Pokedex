@@ -11,26 +11,42 @@ struct PokemonExploreView: View {
 
     @Bindable var viewModel: PokemonExploreViewModel
 
+    private let adaptiveColumns = [
+        GridItem(.adaptive(minimum: 150))
+    ]
+
     var body: some View {
         NavigationView {
-            List {
+
+            ZStack {
+                Color(.systemBackground) // TODO:: pretty
+
+                PokemonListView
+            }
+            .navigationTitle("Pokédex")
+            .navigationBarTitleDisplayMode(.inline)
+            .task {
+                await viewModel.loadPokemonList()
+            }
+        }
+    }
+
+    private var PokemonListView: some View {
+        ScrollView {
+            LazyVGrid(columns: adaptiveColumns, spacing: 10) {
                 ForEach(viewModel.pokemons, id: \.self) { pokemon in
                     NavigationLink {
                         PokemonDetailsView(viewModel: PokemonDetailsViewModel(networkClient: viewModel.networkClient), pokemonId: pokemon.id)
                     }
-                label: {
-                    PokemonExploreCell(pokemon: pokemon)
+                    label: {
+                        PokemonExploreCell(pokemon: pokemon)
                         .onAppear(perform: {
                             Task {
                                 await viewModel.handleOnAppear(pokemon: pokemon)
                             }
                         })
+                    }
                 }
-                }
-            }
-            .navigationTitle("Pokédex")
-            .task {
-                await viewModel.loadPokemonList()
             }
         }
     }

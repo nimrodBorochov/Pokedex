@@ -12,20 +12,21 @@ struct PokemonDetails {
     let name: String
     let height: Int // The height of this Pokémon in decimeter.
     let weight: Int // The weight of this Pokémon in hectograms.
-    let abilities: [String]
-    let stats: [(name: String, rating: Int)]
-    let moves: [String]
+    let abilities: [Ability]
+    let stats: [Stats]
+    let moves: [Move]
     var frontDefaultImageUrl: URL? = nil
     var frontShinyImageUrl: URL? = nil
 
-    init(pokemonDetailsResponse: PokemonDetailsResponse) {
+    init(pokemonDetailsResponse: PokemonDetailsResponse, abilities: [Ability], moves: [Move]) {
         self.id = pokemonDetailsResponse.id
         self.name = pokemonDetailsResponse.name
         self.height = pokemonDetailsResponse.height
         self.weight = pokemonDetailsResponse.weight
-        self.abilities = pokemonDetailsResponse.abilities.compactMap { $0.ability.name }
-        self.stats = pokemonDetailsResponse.stats.compactMap { ($0.stat.name, $0.baseStat) }
-        self.moves = pokemonDetailsResponse.moves.compactMap { $0.move.name }
+
+        self.abilities = abilities
+        self.stats = pokemonDetailsResponse.stats.compactMap { Stats(name: $0.stat.name.replacingOccurrences(of: "special-", with: "Sp. ").capitalized, baseStat: $0.baseStat) }
+        self.moves = moves
 
         if let frontDefault = pokemonDetailsResponse.sprites.other.officialArtwork.frontDefault {
             self.frontDefaultImageUrl = URL(string: frontDefault)
@@ -42,8 +43,8 @@ struct PokemonDetails {
         height: 7,
         weight: 69,
         abilities: [
-            PokemonAbility(ability: Ability(name: "overgrow")),
-            PokemonAbility(ability: Ability(name: "chlorophyll")),
+            PokemonAbility(ability: NamedAPIResource(name: "overgrow", url: "https://pokeapi.co/api/v2/ability/65/")),
+            PokemonAbility(ability: NamedAPIResource(name: "chlorophyll", url: "https://pokeapi.co/api/v2/ability/34/")),
         ],
         stats: [
             PokemonStats(stat: NamedAPIResource(name: "hp", url: ""),
@@ -83,5 +84,24 @@ struct PokemonDetails {
             frontDefault: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
             frontShiny: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/1.png")
         ))
-    ))
+    ),abilities: [Ability(abilityResponse: AbilityResponse(name: "overgrow",
+                                                           effectEntries: [
+                                                               EffectEntries(
+                                                                   effect: "When this Pokémon has 1/3 or less of its HP remaining, its grass-type moves inflict 1.5× as much regular damage.",
+                                                                   language: NamedAPIResource(
+                                                                       name: "en",
+                                                                       url: ""
+                                                                   )
+                                                               )
+                                                           ]))],
+                                                        moves: [Move(moveResponse: MoveResponse(name: "swords-dance", effectEntries: [
+                                                            EffectEntries(
+                                                                effect: "Raises the user's Attack by two stages.",
+                                                                language: NamedAPIResource(
+                                                                    name: "en",
+                                                                    url: ""
+                                                                )
+                                                            )
+                                                        ]))])
+
 }

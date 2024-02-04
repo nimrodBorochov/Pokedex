@@ -51,6 +51,7 @@ struct PokemonDetailsView: View {
 
                 }
             }.padding(20)
+            
 
             ZStack {
 
@@ -84,25 +85,36 @@ struct PokemonDetailsView: View {
                 List {
                     switch selectedTab {
                     case 0:
-
-                        ForEach(viewModel.pokemon?.abilities ?? [], id: \.self) { ability in
-                            Text(ability)
+                        ForEach(viewModel.pokemon?.abilities ?? []) { ability in
+                            AbilityView(ability: ability)
                         }
 
                     case 1:
-                        ForEach(viewModel.pokemon?.stats ?? [], id: \.self.name) { stats in
+                        ForEach(viewModel.pokemon?.stats ?? []) { stat in
                             HStack {
-                                Text(stats.name)
-                                Spacer()
-                                Text(String(stats.rating))
+                                HStack {
+                                    Text(stat.name)
+                                        .foregroundColor(.gray)
+                                    Spacer()
+                                    Text("\(stat.baseStat)")
+                                        .fontWeight(.bold)
+                                }
+
+                                ProgressView(value: Float(stat.baseStat), total: 255)
+                                .tint(Color(.red))
+                                    .progressViewStyle(LinearProgressViewStyle())
+                                    .scaleEffect(x: 1, y: 4, anchor: .center)
                             }
                         }
 
                     case 2:
-
-                        ForEach(viewModel.pokemon?.moves ?? [], id: \.self) { move in
-                            Text(move)
+                        ForEach(viewModel.pokemon?.moves ?? []) { move in
+                            MoveView(move: move)
                         }
+
+//                        ForEach(viewModel.pokemon?.moves ?? []) { move in
+//                            Text(move)
+//                        }
 
                     default :
                         EmptyView()

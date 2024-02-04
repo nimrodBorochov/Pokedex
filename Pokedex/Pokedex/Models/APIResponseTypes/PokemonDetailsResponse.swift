@@ -20,11 +20,7 @@ struct PokemonDetailsResponse: Codable {
 
 struct PokemonAbility : Codable
 {
-    let ability: Ability
-}
-
-struct Ability: Codable {
-    let name: String
+    let ability: NamedAPIResource
 }
 
 struct PokemonStats: Codable {
