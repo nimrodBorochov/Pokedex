@@ -2,7 +2,7 @@
 //  Mocks.swift
 //  PokedexTests
 //
-//  Created by Oren Idan on 04/02/2024.
+//  Created by Nimrod Borochov on 04/02/2024.
 //
 
 import Foundation

@@ -27,7 +27,7 @@ struct UserPokemonsView: View {
             }
             .scrollContentBackground(.hidden)
         }
-        .onFirstAppear {
+        .task {
             viewModel.getUserPokemons()
         }
     }
